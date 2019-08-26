@@ -1,0 +1,39 @@
+DROP PROCEDURE IF EXISTS ADD_PRODUCT;
+GO
+
+CREATE PROCEDURE ADD_PRODUCT @PPRODID INT, @PPRODNAME NVARCHAR, @PPRICE MONEY AS
+
+BEGIN
+    BEGIN TRY
+
+        IF @PPRODID < 1000 OR @PPRODID > 2500
+            THROW 50040, 'Product ID out of range.', 1
+        ELSE IF @PPRICE < 0 OR @PPRICE > 999.99
+            THROW 50050, 'Price out of range.', 1
+        
+        INSERT INTO PRODUCT (PRODID, PRODNAME, SELLING_PRICE, SALES_YTD)
+        VALUES (@PPRODID,@PPRODNAME,@PPRICE,0);
+    END TRY
+    BEGIN CATCH
+        IF ERROR_NUMBER() = 2627
+            THROW 50030, 'Duplicate product ID', 1
+        ELSE IF ERROR_NUMBER() = 50040
+            THROW
+        ELSE IF ERROR_NUMBER() = 50050
+            THROW
+        ELSE
+            BEGIN
+                DECLARE @ERRORMESSAGE NVARCHAR(MAX) = ERROR_MESSAGE();
+                    THROW 50000, @ERRORMESSAGE, 1
+            END;
+    END CATCH
+
+END;
+GO
+
+
+EXEC ADD_PRODUCT @PPRODID = 1500, @PPRODNAME = 'testdude2', @PPRICE = 2;
+
+EXEC ADD_PRODUCT @PPRODID = 5, @PPRODNAME = 'testdude3', @PPRICE = 1000;
+
+select * from PRODUCT;
