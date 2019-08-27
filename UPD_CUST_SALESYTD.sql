@@ -31,8 +31,8 @@ BEGIN
 END;
 GO
 
-select * from customer;
+SELECT * FROM customer;
 
 EXEC UPD_CUST_SALESYTD @PCUSTID = 1, @PAMT = 250;
 
-select * from customer;
+SELECT * FROM customer;

@@ -31,6 +31,6 @@ GO
 
 EXEC ADD_CUSTOMER @pcustid = 1, @pcustname = 'testdude2';
 
-EXEC ADD_CUSTOMER @pcustid = 500, @pcustname = 'testdude3';
+EXEC ADD_CUSTOMER @pcustid = 3, @pcustname = 'testdude3';
 
 select * from customer;
