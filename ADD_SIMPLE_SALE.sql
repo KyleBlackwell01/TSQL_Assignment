@@ -1,0 +1,48 @@
+DROP PROCEDURE IF EXISTS ADD_SIMPLE_SALE;
+GO
+
+CREATE PROCEDURE ADD_SIMPLE_SALE @PCUSTID INT, @PPRODID INT, @PQTY INT AS
+
+BEGIN
+    BEGIN TRY
+        
+        IF @PQTY < 1 OR @PQTY > 999
+            THROW 50140, 'Sale Quantity outside valid range.', 1
+        ELSE IF (dbo.CUSTOMER.STATUS <> 'OK')
+            THROW 50150, 'Customer status is not OK.', 1
+        ELSE IF (@PCUSTID IS NULL)
+            THROW 50160, 'Customer ID not found.', 1
+        ELSE IF (@PPRODID IS NULL)
+            THROW 50170, 'Product ID not found.', 1
+        
+
+        EXEC UPD_CUST_SALESYTD @PCUSTID, @PAMT = SELECT (@PQTY * SELLING_PRICE) FROM PRODUCT;
+        EXEC UPD_PROD_SALESYTD @PPRODID, @PAMT = SELECT (@PQTY * SELLING_PRICE) FROM PRODUCT;
+    END TRY
+    BEGIN CATCH
+
+        IF ERROR_NUMBER() = 50140
+            THROW
+        ELSE IF ERROR_NUMBER() = 50150
+            THROW
+        ELSE IF ERROR_NUMBER() = 50160
+            THROW
+        ELSE IF ERROR_NUMBER() = 50170
+            THROW
+        ELSE
+            BEGIN
+                DECLARE @ERRORMESSAGE NVARCHAR(MAX) = ERROR_MESSAGE();
+                THROW 50000, @ERRORMESSAGE, 1
+            END;
+    END CATCH;
+
+END;
+GO
+
+SELECT * FROM CUSTOMER;
+SELECT * FROM PRODUCT;
+
+EXEC ADD_SIMPLE_SALE @PCUSTID 1, @PPRODID = 1500, @PQTY = 4;
+
+SELECT * FROM CUSTOMER;
+SELECT * FROM PRODUCT;
