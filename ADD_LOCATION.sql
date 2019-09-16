@@ -6,7 +6,7 @@ CREATE PROCEDURE ADD_LOCATION @PLOCCODE NVARCHAR(5), @PMINQTY INT, @PMAXQTY INT 
 BEGIN
     BEGIN TRY
 
-        IF @PLOCCODE <> len(5)
+        IF (LEN(@PLOCCODE) <> 2)
             THROW 50190, 'Location Code length invalid', 1
         ELSE IF @PMINQTY < 0 OR @PMINQTY > 999
             THROW 50200, 'Minimum Qty out of range', 1
@@ -15,7 +15,7 @@ BEGIN
         ELSE IF @PMINQTY > @PMAXQTY
             THROW 50220, 'Minimum Qty larger than Maximum qty', 1
 
-        SET @PLOCCODE = (CONCAT(@PLOCCODE, 'loc'))
+        SET @PLOCCODE = (CONCAT('loc', @PLOCCODE))
         
         INSERT INTO LOCATION (LOCID, MINQTY, MAXQTY) 
         VALUES (@PLOCCODE, @PMINQTY, @PMAXQTY);
@@ -43,8 +43,8 @@ END;
 
 GO
 select * from LOCATION;
-EXEC ADD_LOCATION @PLOCCODE = '22', @PMINQTY = 4, @PMAXQTY = 9;
+EXEC ADD_LOCATION @PLOCCODE = 24, @PMINQTY = 4, @PMAXQTY = 9;
 select * from LOCATION;
-EXEC ADD_LOCATION @PLOCCODE = 22, @PMINQTY = 1, @PMAXQTY = 8;
+EXEC ADD_LOCATION @PLOCCODE = 25, @PMINQTY = 1, @PMAXQTY = 8;
 
 select * from LOCATION;
