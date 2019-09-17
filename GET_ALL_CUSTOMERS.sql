@@ -29,7 +29,7 @@ BEGIN
 
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        PRINT(CONCAT('ID: ', @CUSTID, ' Name: ', @CUSTNAME, ' Total Sales: ', @SALES_YTD, ' STATUS: ', @STATUS))
+        PRINT(CONCAT('ID: ', @CUSTID, ' Name: ', @CUSTNAME, ' SALES YTD: ', @SALES_YTD, ' STATUS: ', @STATUS))
         FETCH NEXT FROM @CUR INTO @CUSTID, @CUSTNAME, @SALES_YTD, @STATUS;
     END;
     CLOSE @CUR;
