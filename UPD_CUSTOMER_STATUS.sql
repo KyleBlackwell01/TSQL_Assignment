@@ -8,7 +8,7 @@ BEGIN
 
         IF (@PCUSTID IS NULL)
             THROW 50120, 'Customer ID not found.', 1
-        ELSE IF ((@PSTATUS <> 'SUSPEND') OR @PSTATUS <> 'OK')
+        ELSE IF ((LEN(@PSTATUS) > 7 AND LEN(@PSTATUS) < 2))
             THROW 50130, 'Invalid Status value.', 1
 
         UPDATE CUSTOMER
