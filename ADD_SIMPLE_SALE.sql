@@ -11,7 +11,7 @@ BEGIN
         
         IF @PQTY < 1 OR @PQTY > 999
             THROW 50140, 'Sale Quantity outside valid range.', 1
-        ELSE IF (@STATUS <> 'OK')
+        ELSE IF (len(@STATUS) > 2)
             THROW 50150, 'Customer status is not OK.', 1
         ELSE IF (@PCUSTID IS NULL)
             THROW 50160, 'Customer ID not found.', 1

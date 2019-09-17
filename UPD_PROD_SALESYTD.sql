@@ -12,7 +12,7 @@ BEGIN
             THROW 50110, 'Amount out of range.', 1
 
         UPDATE PRODUCT
-            SET SALES_YTD = @PAMT
+            SET SALES_YTD = @PAMT + SALES_YTD
             WHERE PRODID = @PPRODID
     END TRY
     BEGIN CATCH

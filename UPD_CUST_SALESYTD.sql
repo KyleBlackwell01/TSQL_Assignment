@@ -12,7 +12,7 @@ BEGIN
             THROW 50080, 'Amount out of range.', 1
 
         UPDATE CUSTOMER
-            SET SALES_YTD = @PAMT
+            SET SALES_YTD = @PAMT + SALES_YTD
             WHERE CUSTID = @PCUSTID
     END TRY
     BEGIN CATCH
